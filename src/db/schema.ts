@@ -1,0 +1,296 @@
+import { pgTable, serial, varchar, text, integer, timestamp, boolean, jsonb, numeric, date } from "drizzle-orm/pg-core";
+
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  email: varchar("email", { length: 255 }).notNull().unique(),
+  passwordHash: varchar("password_hash", { length: 255 }).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  role: varchar("role", { length: 50 }).notNull().default("operations"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const trips = pgTable("trips", {
+  id: serial("id").primaryKey(),
+  title: varchar("title", { length: 255 }).notNull(),
+  clientName: varchar("client_name", { length: 255 }).notNull(),
+  clientEmail: varchar("client_email", { length: 255 }),
+  clientPhone: varchar("client_phone", { length: 50 }),
+  language: varchar("language", { length: 10 }).default("EN"),
+  departureCountry: varchar("departure_country", { length: 100 }),
+  destinationCountry: varchar("destination_country", { length: 100 }),
+  departureCity: varchar("departure_city", { length: 100 }),
+  destinationCity: varchar("destination_city", { length: 100 }),
+  startDate: date("start_date"),
+  endDate: date("end_date"),
+  nights: integer("nights").default(2),
+  durationDays: integer("duration_days").default(3),
+  adults: integer("adults").default(7),
+  children: integer("children").default(0),
+  childrenAges: varchar("children_ages", { length: 100 }),
+  infants: integer("infants").default(0),
+  infantAges: varchar("infant_ages", { length: 100 }),
+  singleOccupancy: integer("single_occupancy").default(0),
+  doubleOccupancy: integer("double_occupancy").default(0),
+  status: varchar("status", { length: 50 }).default("draft"),
+  targetProfit: numeric("target_profit", { precision: 12, scale: 2 }).default("550000"),
+  expectedRevenue: numeric("expected_revenue", { precision: 12, scale: 2 }).default("0"),
+  currency: varchar("currency", { length: 10 }).default("NGN"),
+  exchangeRate: numeric("exchange_rate", { precision: 10, scale: 4 }).default("2.5"),
+  mealPlan: varchar("meal_plan", { length: 50 }).default("custom"),
+  notes: text("notes"),
+  assignedTo: varchar("assigned_to", { length: 255 }),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const hotelsMaster = pgTable("hotels_master", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  country: varchar("country", { length: 100 }),
+  city: varchar("city", { length: 100 }),
+  category: varchar("category", { length: 255 }),
+  rate: numeric("rate", { precision: 12, scale: 2 }),
+  currency: varchar("currency", { length: 10 }),
+  pricingBasis: varchar("pricing_basis", { length: 50 }),
+  classification: varchar("classification", { length: 50 }),
+  supplierCost: numeric("supplier_cost", { precision: 12, scale: 2 }),
+  sellingRate: numeric("selling_rate", { precision: 12, scale: 2 }),
+  breakfastPrice: numeric("breakfast_price", { precision: 12, scale: 2 }),
+  notes: text("notes"),
+});
+
+export const restaurantsMaster = pgTable("restaurants_master", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  destination: varchar("destination", { length: 100 }),
+  cuisine: varchar("cuisine", { length: 100 }),
+  mealType: varchar("meal_type", { length: 50 }),
+  costPerPerson: numeric("cost_per_person", { precision: 12, scale: 2 }),
+  currency: varchar("currency", { length: 10 }),
+  classification: varchar("classification", { length: 50 }),
+  includedType: varchar("included_type", { length: 50 }),
+  notes: text("notes"),
+});
+
+export const activitiesMaster = pgTable("activities_master", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  country: varchar("country", { length: 100 }),
+  currency: varchar("currency", { length: 10 }),
+  pricingBasis: varchar("pricing_basis", { length: 50 }),
+  classification: varchar("classification", { length: 50 }),
+  supplierCost: numeric("supplier_cost", { precision: 12, scale: 2 }),
+  sellingPrice: numeric("selling_price", { precision: 12, scale: 2 }),
+  perPerson: boolean("per_person").default(true),
+  fixedGroupPrice: boolean("fixed_group_price").default(false),
+  notes: text("notes"),
+});
+
+export const vehiclesMaster = pgTable("vehicles_master", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  capacity: integer("capacity"),
+  currency: varchar("currency", { length: 10 }),
+  rate: numeric("rate", { precision: 12, scale: 2 }),
+  pricingBasis: varchar("pricing_basis", { length: 50 }),
+  classification: varchar("classification", { length: 50 }),
+  supplierCost: numeric("supplier_cost", { precision: 12, scale: 2 }),
+  sellingPrice: numeric("selling_price", { precision: 12, scale: 2 }),
+  inclusions: text("inclusions"),
+  notes: text("notes"),
+});
+
+export const guidesMaster = pgTable("guides_master", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  currency: varchar("currency", { length: 10 }),
+  rate: numeric("rate", { precision: 12, scale: 2 }),
+  duration: varchar("duration", { length: 50 }),
+  classification: varchar("classification", { length: 50 }),
+  supplierCost: numeric("supplier_cost", { precision: 12, scale: 2 }),
+  sellingPrice: numeric("selling_price", { precision: 12, scale: 2 }),
+  notes: text("notes"),
+});
+
+export const borderServicesMaster = pgTable("border_services_master", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  category: varchar("category", { length: 100 }),
+  currency: varchar("currency", { length: 10 }),
+  rate: numeric("rate", { precision: 12, scale: 2 }),
+  pricingBasis: varchar("pricing_basis", { length: 50 }),
+  classification: varchar("classification", { length: 50 }),
+  notes: text("notes"),
+});
+
+export const itineraryDays = pgTable("itinerary_days", {
+  id: serial("id").primaryKey(),
+  tripId: integer("trip_id").references(() => trips.id, { onDelete: "cascade" }),
+  dayNumber: integer("day_number").notNull(),
+  date: date("date"),
+  title: varchar("title", { length: 255 }).notNull(),
+  description: text("description"),
+  mealsIncluded: varchar("meals_included", { length: 100 }),
+});
+
+export const itineraryItems = pgTable("itinerary_items", {
+  id: serial("id").primaryKey(),
+  dayId: integer("day_id").references(() => itineraryDays.id, { onDelete: "cascade" }),
+  tripId: integer("trip_id").references(() => trips.id, { onDelete: "cascade" }),
+  time: varchar("time", { length: 50 }),
+  title: varchar("title", { length: 255 }).notNull(),
+  type: varchar("type", { length: 50 }),
+  location: varchar("location", { length: 255 }),
+  duration: varchar("duration", { length: 50 }),
+  transport: varchar("transport", { length: 255 }),
+  notes: text("notes"),
+  sortOrder: integer("sort_order").default(0),
+});
+
+export const tripAccommodations = pgTable("trip_accommodations", {
+  id: serial("id").primaryKey(),
+  tripId: integer("trip_id").references(() => trips.id, { onDelete: "cascade" }),
+  hotelMasterId: integer("hotel_master_id"),
+  hotelName: varchar("hotel_name", { length: 255 }),
+  location: varchar("location", { length: 255 }),
+  roomCategory: varchar("room_category", { length: 255 }),
+  rooms: integer("rooms").default(1),
+  occupancyType: varchar("occupancy_type", { length: 50 }),
+  guests: integer("guests"),
+  checkIn: date("check_in"),
+  checkOut: date("check_out"),
+  nights: integer("nights").default(1),
+  breakfastIncludedQty: integer("breakfast_included_qty").default(0),
+  extraBreakfastQty: integer("extra_breakfast_qty").default(0),
+  extraBreakfastPrice: numeric("extra_breakfast_price", { precision: 12, scale: 2 }),
+  mealPlan: varchar("meal_plan", { length: 50 }),
+  supplierCost: numeric("supplier_cost", { precision: 12, scale: 2 }),
+  sellingRate: numeric("selling_rate", { precision: 12, scale: 2 }),
+  bookingStatus: varchar("booking_status", { length: 50 }).default("Pending"),
+  reference: varchar("reference", { length: 255 }),
+  specialRequests: text("special_requests"),
+});
+
+export const tripServices = pgTable("trip_services", {
+  id: serial("id").primaryKey(),
+  tripId: integer("trip_id").references(() => trips.id, { onDelete: "cascade" }),
+  serviceName: varchar("service_name", { length: 255 }).notNull(),
+  category: varchar("category", { length: 100 }),
+  supplierCost: numeric("supplier_cost", { precision: 12, scale: 2 }),
+  sellingRate: numeric("selling_rate", { precision: 12, scale: 2 }),
+  finalSellingPrice: numeric("final_selling_price", { precision: 12, scale: 2 }),
+  quantity: integer("quantity").default(1),
+  pricingBasis: varchar("pricing_basis", { length: 50 }),
+  currency: varchar("currency", { length: 10 }),
+  classification: varchar("classification", { length: 50 }),
+  includedInPackage: boolean("included_in_package").default(false),
+  costCovered: boolean("cost_covered").default(false),
+  estimatedCost: numeric("estimated_cost", { precision: 12, scale: 2 }),
+  actualCost: numeric("actual_cost", { precision: 12, scale: 2 }),
+  estimatedRevenue: numeric("estimated_revenue", { precision: 12, scale: 2 }),
+  actualRevenue: numeric("actual_revenue", { precision: 12, scale: 2 }),
+  notes: text("notes"),
+});
+
+export const quotations = pgTable("quotations", {
+  id: serial("id").primaryKey(),
+  tripId: integer("trip_id").references(() => trips.id, { onDelete: "cascade" }),
+  version: integer("version").default(1),
+  title: varchar("title", { length: 255 }),
+  language: varchar("language", { length: 10 }).default("EN"),
+  status: varchar("status", { length: 50 }).default("Draft"),
+  totalSellingPrice: numeric("total_selling_price", { precision: 12, scale: 2 }),
+  discount: numeric("discount", { precision: 12, scale: 2 }).default("0"),
+  additionalCharges: numeric("additional_charges", { precision: 12, scale: 2 }).default("0"),
+  finalAmount: numeric("final_amount", { precision: 12, scale: 2 }),
+  currency: varchar("currency", { length: 10 }).default("NGN"),
+  inclusions: text("inclusions"),
+  exclusions: text("exclusions"),
+  optionalExtras: text("optional_extras"),
+  conditions: text("conditions"),
+  validUntil: date("valid_until"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const payments = pgTable("payments", {
+  id: serial("id").primaryKey(),
+  tripId: integer("trip_id").references(() => trips.id, { onDelete: "cascade" }),
+  type: varchar("type", { length: 50 }),
+  payerType: varchar("payer_type", { length: 50 }),
+  amount: numeric("amount", { precision: 12, scale: 2 }),
+  currency: varchar("currency", { length: 10 }),
+  method: varchar("method", { length: 100 }),
+  date: date("date"),
+  reference: varchar("reference", { length: 255 }),
+  status: varchar("status", { length: 50 }).default("confirmed"),
+  notes: text("notes"),
+});
+
+export const financialTransactions = pgTable("financial_transactions", {
+  id: serial("id").primaryKey(),
+  tripId: integer("trip_id").references(() => trips.id, { onDelete: "cascade" }),
+  description: varchar("description", { length: 255 }).notNull(),
+  category: varchar("category", { length: 100 }),
+  amount: numeric("amount", { precision: 12, scale: 2 }),
+  currency: varchar("currency", { length: 10 }),
+  type: varchar("type", { length: 50 }),
+  quantity: integer("quantity").default(1),
+  unit: varchar("unit", { length: 50 }),
+  supplier: varchar("supplier", { length: 255 }),
+  expectedCost: numeric("expected_cost", { precision: 12, scale: 2 }),
+  revisedCost: numeric("revised_cost", { precision: 12, scale: 2 }),
+  actualCost: numeric("actual_cost", { precision: 12, scale: 2 }),
+  expectedRevenue: numeric("expected_revenue", { precision: 12, scale: 2 }),
+  actualRevenue: numeric("actual_revenue", { precision: 12, scale: 2 }),
+  amountPaid: numeric("amount_paid", { precision: 12, scale: 2 }),
+  status: varchar("status", { length: 50 }).default("estimated"),
+  includedInPackage: boolean("included_in_package").default(false),
+  costCovered: boolean("cost_covered").default(false),
+  paymentMethod: varchar("payment_method", { length: 100 }),
+  reference: varchar("reference", { length: 255 }),
+  date: date("date"),
+  staffMember: varchar("staff_member", { length: 255 }),
+  notes: text("notes"),
+});
+
+export const cashAdvances = pgTable("cash_advances", {
+  id: serial("id").primaryKey(),
+  tripId: integer("trip_id").references(() => trips.id, { onDelete: "cascade" }),
+  amount: numeric("amount", { precision: 12, scale: 2 }),
+  currency: varchar("currency", { length: 10 }).default("NGN"),
+  recipient: varchar("recipient", { length: 255 }),
+  date: date("date"),
+  type: varchar("type", { length: 50 }),
+  status: varchar("status", { length: 50 }).default("pending"),
+  notes: text("notes"),
+});
+
+export const auditLogs = pgTable("audit_logs", {
+  id: serial("id").primaryKey(),
+  tripId: integer("trip_id"),
+  action: varchar("action", { length: 255 }),
+  details: text("details"),
+  userId: varchar("user_id", { length: 100 }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const settings = pgTable("settings", {
+  id: serial("id").primaryKey(),
+  key: varchar("key", { length: 100 }).unique(),
+  value: text("value"),
+});
+
+export const tripRestaurants = pgTable("trip_restaurants", {
+  id: serial("id").primaryKey(),
+  tripId: integer("trip_id").references(() => trips.id, { onDelete: "cascade" }),
+  dayId: integer("day_id"),
+  restaurantName: varchar("restaurant_name", { length: 255 }),
+  location: varchar("location", { length: 255 }),
+  mealType: varchar("meal_type", { length: 50 }),
+  time: varchar("time", { length: 50 }),
+  duration: varchar("duration", { length: 50 }),
+  budgetPerPerson: numeric("budget_per_person", { precision: 12, scale: 2 }),
+  includedType: varchar("included_type", { length: 50 }),
+  reservationStatus: varchar("reservation_status", { length: 50 }),
+  notes: text("notes"),
+});
