@@ -381,7 +381,7 @@ function ProposalDocument({ data, lang, selectedOption, onSelectOption }: { data
         <div className="mt-5 flex flex-wrap justify-center gap-6 text-[11px] text-white/60">
           <span>✉ {COMPANY_EMAIL}</span>
           <span>☎ {COMPANY_PHONE}</span>
-          <span>🌍 Cotonou · Lomé · Lagos</span>
+        <span>🌍 GOTA VOYAGES — TRAVEL & TOURISM</span>
         </div>
         <div className="mt-6 text-[10px] text-white/40">Generated {new Date().toLocaleDateString(lang === "FR" ? "fr-FR" : "en-GB")} • Prices valid 7 days • Subject to availability</div>
       </div>
