@@ -44,3 +44,19 @@ body { margin: 0; background: #0a0a0a; color: #111; }
   #client-pdf { box-shadow: none !important; border: none !important; }
   @page { margin: 1.2cm; size: A4; }
 }
+/* Improve text readability across the dashboard */
+body {
+  color: #1f2937;
+}
+
+input,
+textarea,
+select {
+  color: #1f2937;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #6b7280;
+  opacity: 1;
+}
